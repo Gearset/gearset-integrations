@@ -31,7 +31,7 @@ To use any of the provided integration snippets:
 ### 1. Google Sheets
    - **Description**: Code to synchronize Reporting API information from Gearset into Google Sheets, enabling time-defined tracking and reporting.
    - **Example Use Case**: Automate the Lead Time for Changes velocity metrics for a particular Pipeline into sheets for visualisation.
-   - **Documentation**: See [`google-sheets/README.md`](./google-sheets/README.md) for setup instructions and example usage.
+   - **Documentation**: See [here](https://docs.gearset.com/en/articles/10062950-using-google-sheets-with-gearset-s-reporting-api) for setup instructions and example usage.
 
 ## Customization
 
