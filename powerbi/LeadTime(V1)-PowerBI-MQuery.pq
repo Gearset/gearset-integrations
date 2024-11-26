@@ -1,7 +1,8 @@
 let
-    startDate = "2024-01-20",            // TODO: Replace these dates (YYYY-MM-DD) with the range you want to grab the lead time aggregate for
+    startDate = "2024-01-20",               // TODO: Replace these dates (YYYY-MM-DD) with the range you want to grab the lead time aggregate for
     endDate = "2024-07-20",
-    pipelineId = "<YourPipelineIDHere>", // TODO: Replace this with your PipelineID
+    pipelineId = "<YourPipelineIDHere>",    // TODO: Replace this with your PipelineID
+    gearsetApiToken = "<YourAPITokenHere>", // TODO: Replace this with your Gearset API Token
     
     // URL template with placeholders for StartDate, EndDate, and PipelineId. Aggregating Weekly
     urlWithoutDates = "https://api.gearset.com/public/reporting/lead-time/{PipelineId}/aggregate" &
@@ -11,7 +12,6 @@ let
     
     // Replace placeholders with actual values in one line
     url = Text.Replace(Text.Replace(Text.Replace(urlWithoutDates, "{PipelineId}", pipelineId), "{StartDate}", startDate), "{EndDate}", endDate),
-    gearsetApiToken = "<YourAPITokenHere>", // TODO: Replace this with your Gearset API Token
     headers = [ #"Authorization" = "token " & gearsetApiToken],
     result = Json.Document(Web.Contents(url, [Headers = headers])),
     Environments = result[Environments],

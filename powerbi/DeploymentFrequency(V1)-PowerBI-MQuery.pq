@@ -1,4 +1,6 @@
 let
+    gearsetApiToken = "<YourAPITokenHere>", // TODO: Replace this with your Gearset API Token
+
     // Allow easy switching of the date dynamically to get the last 30 days, on an interval of 'daily' and grouped by TotalDeployments
     startDate = Date.ToText(Date.AddDays(Date.From(DateTime.LocalNow()), -30), "yyyy-MM-dd"),
     endDate = Date.ToText(Date.From(DateTime.LocalNow()), "yyyy-MM-dd"),
@@ -6,8 +8,8 @@ let
         "?StartDate={StartDate}T00%3A00%3A00.0000000Z" &
         "&EndDate={EndDate}T00%3A00%3A00.0000000Z" &
         "&Interval=Daily&GroupBy=TotalDeploymentCount",
+        
     url = Text.Replace(Text.Replace(urlWithoutDates, "{StartDate}", startDate), "{EndDate}", endDate),
-    gearsetApiToken = "<YourAPITokenHere>", // TODO: Replace this with your Gearset API Token
     headers = [ #"Authorization" = "token " & gearsetApiToken],
     result = Json.Document(Web.Contents(url, [Headers = headers])),
     Items = result[Items],
