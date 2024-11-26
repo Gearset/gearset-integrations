@@ -9,10 +9,14 @@ This repository provides foundational code snippets for integrating **Gearset** 
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Available Integrations](#available-integrations)
-- [Customization](#customization)
-- [License](#license)
+- [gearset-integrations](#gearset-integrations)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+  - [Available Integrations](#available-integrations)
+    - [1. Google Sheets](#1-google-sheets)
+    - [2. Power BI](#2-power-bi)
+  - [Customization](#customization)
+  - [License](#license)
 
 ---
 
@@ -32,6 +36,11 @@ To use any of the provided integration snippets:
    - **Description**: Code to synchronize Reporting API information from Gearset into Google Sheets, enabling time-defined tracking and reporting.
    - **Example Use Case**: Automate the Lead Time for Changes velocity metrics for a particular Pipeline into sheets for visualisation.
    - **Documentation**: See [here](https://docs.gearset.com/en/articles/10062950-using-google-sheets-with-gearset-s-reporting-api) for setup instructions and example usage.
+
+### 2. Power BI
+   - **Description**: Code to synchronize Reporting API information from Gearset into Power BI Desktop, enabling time-defined tracking and reporting for key endpoints.
+   - **Example Use Case**: Pull Deployment Frequency information for the last 30 days across the team, or Lead Time over a longer period for a particular Pipeline.
+   - **Documentation**: See [here](https://docs.gearset.com/en/articles/9596583-using-powerbi-with-gearset-s-reporting-api) for setup instructions and example usage.
 
 ## Customization
 
