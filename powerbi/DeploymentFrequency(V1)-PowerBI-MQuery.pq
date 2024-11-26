@@ -7,7 +7,8 @@ let
         "&EndDate={EndDate}T00%3A00%3A00.0000000Z" &
         "&Interval=Daily&GroupBy=TotalDeploymentCount",
     url = Text.Replace(Text.Replace(urlWithoutDates, "{StartDate}", startDate), "{EndDate}", endDate),
-    headers = [ #"Authorization" = "token XXXXX"],
+    gearsetApiToken = "<YourAPITokenHere>", // TODO: Replace this with your Gearset API Token
+    headers = [ #"Authorization" = "token " & gearsetApiToken],
     result = Json.Document(Web.Contents(url, [Headers = headers])),
     Items = result[Items],
     Items1 = Items{0},
