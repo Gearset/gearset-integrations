@@ -1,4 +1,4 @@
-
+<!-- omit in toc -->
 # gearset-integrations
 
 This repository provides foundational code snippets for integrating **Gearset** with various external systems. The examples are intended to demonstrate potential integration approaches and serve as a starting point for customizing Gearset workflows with other tools and services.
@@ -6,17 +6,15 @@ This repository provides foundational code snippets for integrating **Gearset** 
 > **Note**: The code snippets in this repository are provided "as-is" under the [Apache 2.0 License](./LICENSE). They are **examples only** and should be tailored to fit your specific requirements. We accept no responsibility or liability for their use.
 
 ---
-
+<!-- omit in toc -->
 ## Table of Contents
 
-- [gearset-integrations](#gearset-integrations)
-  - [Table of Contents](#table-of-contents)
-  - [Getting Started](#getting-started)
-  - [Available Integrations](#available-integrations)
-    - [1. Google Sheets](#1-google-sheets)
-    - [2. Power BI](#2-power-bi)
-  - [Customization](#customization)
-  - [License](#license)
+- [Getting Started](#getting-started)
+- [Available Integrations](#available-integrations)
+  - [1. Google Sheets](#1-google-sheets)
+  - [2. Power BI](#2-power-bi)
+- [Customization](#customization)
+- [License](#license)
 
 ---
 
