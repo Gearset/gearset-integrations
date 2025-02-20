@@ -44,11 +44,14 @@ steps:
             $changes = git diff --name-only --relative --diff-filter=AMCR "$TARGET_BRANCH_NAME...$(SOURCE_BRANCH_NAME)"
             # Work out the changes between the target branch and what we've proposed in the source - doesn't include deletions
             Write-Host $changes
-            $RelevantFilesForScanning = $changes -match '\.cls$|\.trigger$|\.js$|\.html$|\.page$|\.cmp$|\.component$'
+            $RelevantFilesForScanning = $changes | Where-Object { $_ -match '\.(cls|trigger|js|html|page|cmp|component)$' }
             # Expanded to cover apex classes/triggers/pages, and LWC/Aura/Visualforce components too. 
             # TODO: Doesn't cover XML - consider for Flows, but then would run on almost every metadata type which would be inefficient
-            Write-Host "##vso[task.setvariable variable=RELEVANT_FILES_FOUND;]$RelevantFilesForScanning"
-            Write-Host "Set environment variable of 'RELEVANT_FILES_FOUND' to '$RelevantFilesForScanning'"
+            # Convert to Boolean: "true" if there are matches, otherwise "false"
+            $RelevantFilesFound = if ($RelevantFilesForScanning.Count -gt 0) { "true" } else { "false" }
+            # Check if we've found more 1 or more matching file type, so we can set the environment variable to run/skip steps
+            Write-Host "##vso[task.setvariable variable=RELEVANT_FILES_FOUND;]$RelevantFilesFound"
+            Write-Host "Set environment variable of 'RELEVANT_FILES_FOUND' to '$RelevantFilesFound'"
             # Set an environment variable to be TRUE or FALSE
             if (($changes -is [string]) -and ($RelevantFilesForScanning)){ 
               Write-Host "Single file found - copying"
@@ -94,7 +97,8 @@ steps:
     condition: eq(variables['RELEVANT_FILES_FOUND'], 'true') # Only run this if we have valid files to scan
   - script: |
       sf code-analyzer run --workspace '$(Build.ArtifactStagingDirectory)/**' --output-file '$(Build.ArtifactStagingDirectory)/SFCAv5Results.html'
-    # Scan the directory of changed files from the initial PowerShell, letting it dynamically decide engines, and output to html
+    # Scan the directory of changed files from the initial PowerShell, letting it dynamically decide engines for RECOMMENDED rules only, and output to html
+    # We could, in future, specify '--rule-selector all' here for all rules from all engines, or specify on threshold using '--severity-threshold 3' to filter
     displayName: 'Run Salesforce Code Analyzer v5 beta'
     condition: eq(variables['RELEVANT_FILES_FOUND'], 'true') # Only run this if we have valid files to scan
   - task: PublishPipelineArtifact@1
