@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # gearset-integrations
 
-This repository provides foundational code snippets for integrating **Gearset** with various external systems, or tools that can be surfaced into Gearset. The examples are intended to demonstrate potential integration approaches and serve as a starting point for customizing Gearset workflows with other tools and services.
+This repository provides foundational code snippets for integrating **Gearset** with various external systems, or tools that can be surfaced in Gearset. The examples are intended to demonstrate potential integration approaches and serve as a starting point for customizing Gearset workflows with other tools and services.
 
 > **Note**: The code snippets in this repository are provided "as-is" under the [Apache 2.0 License](./LICENSE). They are **examples only** and should be tailored to fit your specific requirements. We accept no responsibility or liability for their use.
 
