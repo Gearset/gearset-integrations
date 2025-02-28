@@ -44,7 +44,7 @@ To use any of the provided integration snippets:
 ### 3. Salesforce Code Analyzer in Azure DevOps
    - **Description**: A .yml file to integrate [Salesforce Code Analyzer](https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/code-analyzer.html) into your Azure DevOps repository, to trigger and scan Pull Requests (PRs) and save the results.
    - **Example Use Case**: Customers wanting to integrate Salesforce Code Analyzer [v5](https://github.com/forcedotcom/sfdx-scanner) into their Azure DevOps repository to run on PRs, which would then surface in Gearset Pipelines.
-   - **Documentation**: See [here](devopslaunchpad.com/blog/salesforce-code-analyzer) for setup instructions inside Azure DevOps and how that would feed into Gearset.
+   - **Documentation**: See [here](https://devopslaunchpad.com/blog/salesforce-code-analyzer) for setup instructions inside Azure DevOps and how that would feed into Gearset.
 
 ## Customization
 
