@@ -22,12 +22,13 @@ This repository provides foundational code snippets for integrating **Gearset** 
 ## Getting Started
 
 To use any of the provided integration snippets:
-1. Clone this repository to your local environment.
+1. Assess the provided snippet (or linked repository) for your needs
+2. Clone this repository to your local environment
    ```bash
    git clone https://github.com/your-org/gearset-integrations.git
    ```
-2. Navigate to the directory of the desired integration.
-3. Review the provided code, modify it as necessary for your specific use case, and ensure it meets any security and compliance requirements relevant to your organization.
+3. Navigate to the directory of the desired integration.
+4. Review the provided code, modify it as necessary for your specific use case, and ensure it meets any security and compliance requirements relevant to your organization.
 
 ## Available Integrations
 
@@ -42,9 +43,9 @@ To use any of the provided integration snippets:
    - **Documentation**: See [here](https://docs.gearset.com/en/articles/9596583-using-powerbi-with-gearset-s-reporting-api) for setup instructions and example usage.
 
 ### 3. Salesforce Code Analyzer in Azure DevOps
-   - **Description**: A .yml file to integrate [Salesforce Code Analyzer](https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/code-analyzer.html) into your Azure DevOps repository, to trigger and scan Pull Requests (PRs) and save the results.
-   - **Example Use Case**: Customers wanting to integrate Salesforce Code Analyzer [v5](https://github.com/forcedotcom/sfdx-scanner) into their Azure DevOps repository to run on PRs, which would then surface in Gearset Pipelines.
-   - **Documentation**: See [here](https://devopslaunchpad.com/blog/salesforce-code-analyzer) for setup instructions inside Azure DevOps and how that would feed into Gearset.
+   - **Description**: An ADO extension to integrate [Salesforce Code Analyzer](https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/code-analyzer.html) into your Azure DevOps repository, with the actual extension being available [here](https://marketplace.visualstudio.com/items?itemName=SamCrossland.salesforce-code-analyzer-ado-repos-task) and backing repository [here](https://github.com/salesforcexland/SFCAIntegrations), to trigger and scan Pull Requests (PRs) and save the html results.
+   - **Example Use Case**: Customers wanting to integrate Salesforce Code Analyzer [v5](https://github.com/forcedotcom/sfdx-scanner) into their Azure DevOps repository to scan when PRs are raised to certain branches, which would then surface as status checks in Gearset Pipelines, if using the appropriate `postStatusCheckToPR` flag and your access token.
+   - **Documentation**: See [here](https://devopslaunchpad.com/blog/salesforce-code-analyzer) for setup instructions inside Azure DevOps and how that would feed into a Gearset Pipeline.
 
 ## Customization
 
