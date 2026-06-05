@@ -1,7 +1,5 @@
 # Getting DORA metrics with Reporting API v3
 
-Complete code sample can be found [here](./dora-metrics.js).
-
 > In order to use Reporting API, you need an Access Token. You can find out how to get your own access token [here](https://docs.gearset.com/en/articles/6099550-creating-a-gearset-api-access-token).
 
 > Pass your token as `Authorization: token <YOUR_TOKEN>` (the word `token` is part of the value), and send `Api-Version: 3` on every request to select the v3 API. The host is `https://api.gearset.com`; EU-hosted accounts should swap it for `https://eu.gearset.com` in the request URLs. **Change failure rate, Total bugs, Total bug fixes, and Mean time to restore** only return data when your team uses [change failure management](https://docs.gearset.com/en/articles/12449961-change-failure-management-bug-fixes).
@@ -14,7 +12,7 @@ Complete code sample can be found [here](./dora-metrics.js).
 - ID of your Pipeline
 - ID of your Pipeline Environment that deploys to Production Salesforce org (needed for some metrics)
 
-## Setup
+### Getting environments from API
 
 You can use the `/reporting/environments` endpoint to get a list of all your Pipeline environments. The one where `OrgLocationType` is `SalesforceProductionOrg` is considered a production environment.
 
@@ -34,6 +32,26 @@ async function getEnvironments() {
 const environments = await getEnvironments();
 console.log(environments);
 ```
+
+## Run the complete sample
+
+The full runnable script is [`dora-metrics.js`](./dora-metrics.js).
+
+1. Open `api/reporting-api/v3/dora-metrics.js`.
+2. Set these constants in the config section:
+   - `API_TOKEN` (Gearset API access token)
+   - `PIPELINE_ID`
+   - `PRODUCTION_ENVIRONMENT_ID`
+   - `START_DATE` and `END_DATE` in ISO UTC format (for example `2025-12-20T00:00:00.000Z`)
+   - Optional tuning: `MAX_STATUS_CHECKS` and `STATUS_CHECK_INTERVAL_MS`
+   - Optional host switch: `BASE_URL` (`https://api.gearset.com` by default, use `https://eu.gearset.com` for EU-hosted accounts)
+3. Run the script:
+
+```bash
+node api/reporting-api/v3/dora-metrics.js
+```
+
+The script logs each API call, waits for the async reporting operation to complete, and then prints all DORA metric outputs.
 
 ## a) Retrieve deployments
 
