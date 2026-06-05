@@ -15,6 +15,9 @@ const BASE_URL = 'https://api.gearset.com';
 const START_DATE = 'YOUR_START_DATE_UTC';
 const END_DATE = 'YOUR_END_DATE_UTC';
 
+const MAX_STATUS_CHECKS = 30;
+const STATUS_CHECK_INTERVAL_MS = 2000;
+
 // Every request carries the token and selects the v3 API.
 const apiHeaders = () => ({
   Authorization: `token ${API_TOKEN}`,
@@ -91,7 +94,12 @@ async function getDeployments() {
   let status = 'Running';
   let pollCount = 0;
   while (status === 'Running') {
-    await sleep(2000);
+    if (pollCount >= MAX_STATUS_CHECKS) {
+      throw new Error(
+        `Get operation status: exceeded max status checks (${MAX_STATUS_CHECKS}) for operation ${OperationStatusId}`
+      );
+    }
+    await sleep(STATUS_CHECK_INTERVAL_MS);
     pollCount += 1;
     const statusRes = await fetchWithLogs(
       `Get operation status (poll ${pollCount})`,
