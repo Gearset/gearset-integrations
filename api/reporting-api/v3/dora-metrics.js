@@ -5,13 +5,15 @@
 // Fill in the four values below, then run: node dora-metrics.js
 
 // --- Configuration -----------------------------------------------------
-const API_TOKEN = 'YOUR_API_ACCESS_TOKEN';
+const API_TOKEN = 'YOUR_API_TOKEN';
 const PIPELINE_ID = 'YOUR_PIPELINE_ID';
 const PRODUCTION_ENVIRONMENT_ID = 'YOUR_PRODUCTION_ENVIRONMENT_ID';
+const BASE_URL = 'https://api.gearset.com';
 
 // The window to analyse, in UTC (inclusive).
-const START_DATE = '2026-04-01T00:00:00.000Z';
-const END_DATE = '2026-04-30T23:59:59.999Z';
+// Example: 2025-12-09T00:00:00.000Z
+const START_DATE = 'YOUR_START_DATE_UTC';
+const END_DATE = 'YOUR_END_DATE_UTC';
 
 // Every request carries the token and selects the v3 API.
 const apiHeaders = () => ({
@@ -21,15 +23,45 @@ const apiHeaders = () => ({
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+async function fetchWithLogs(label, url, options = {}) {
+  const method = options.method || 'GET';
+  console.log(`[API] ${label} -> ${method} ${url}`);
+  const res = await fetch(url, options);
+  console.log(`[API] ${label} <- ${res.status} ${res.statusText || ''}`);
+  return res;
+}
+
+async function readJsonOrThrow(res, label) {
+  const raw = await res.text();
+  console.log(`[API] ${label} response bytes: ${raw.length}`);
+
+  if (!raw) {
+    throw new Error(
+      `${label}: empty response body (HTTP ${res.status} ${res.statusText || ''})`
+    );
+  }
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const snippet = raw.slice(0, 300).replace(/\s+/g, ' ');
+    throw new Error(
+      `${label}: invalid JSON response (HTTP ${res.status} ${res.statusText || ''}). ` +
+      `Body starts with: "${snippet}"`
+    );
+  }
+}
+
 // --- Optional: find your production environment ID ---------------------
 // List the pipeline's environments; the one whose OrgLocationType is
 // 'SalesforceProductionOrg' is production — use its Id as PRODUCTION_ENVIRONMENT_ID.
 async function getEnvironments() {
-  const res = await fetch(
-    `https://api.gearset.com/public/reporting/environments?PipelineId=${PIPELINE_ID}`,
+  const res = await fetchWithLogs(
+    'Get environments',
+    `${BASE_URL}/public/reporting/environments?PipelineId=${PIPELINE_ID}`,
     { headers: apiHeaders() }
   );
-  return res.json();
+  return readJsonOrThrow(res, 'Get environments');
 }
 
 // --- a) Retrieve deployment info ---------------------------------------
@@ -44,29 +76,43 @@ async function getDeployments() {
     PipelineId: PIPELINE_ID,
   });
 
-  const start = await fetch(
-    `https://api.gearset.com/public/reporting/deployments?${params}`,
+  const start = await fetchWithLogs(
+    'Start deployments report',
+    `${BASE_URL}/public/reporting/deployments?${params}`,
     { method: 'POST', headers }
   );
-  const { OperationStatusId } = await start.json();
+  const { OperationStatusId } = await readJsonOrThrow(start, 'Start deployments report');
+  if (!OperationStatusId) {
+    throw new Error('Start deployments report: missing OperationStatusId in response');
+  }
+  console.log(`[API] OperationStatusId: ${OperationStatusId}`);
 
   // Step 2: poll the operation status until it is no longer Running.
   let status = 'Running';
+  let pollCount = 0;
   while (status === 'Running') {
     await sleep(2000);
-    const statusRes = await fetch(
-      `https://api.gearset.com/public/operation/${OperationStatusId}/status`,
+    pollCount += 1;
+    const statusRes = await fetchWithLogs(
+      `Get operation status (poll ${pollCount})`,
+      `${BASE_URL}/public/operation/${OperationStatusId}/status`,
       { headers }
     );
-    status = (await statusRes.json()).Status;
+    status = (await readJsonOrThrow(statusRes, 'Get operation status')).Status;
+    console.log(`[API] Operation status: ${status}`);
   }
 
   // Step 3: retrieve the result.
-  const result = await fetch(
-    `https://api.gearset.com/public/operation/${OperationStatusId}/result`,
+  const result = await fetchWithLogs(
+    'Get operation result',
+    `${BASE_URL}/public/operation/${OperationStatusId}/result`,
     { headers }
   );
-  return (await result.json()).Deployments;
+  const payload = await readJsonOrThrow(result, 'Get operation result');
+  if (!Array.isArray(payload.Deployments)) {
+    throw new Error('Get operation result: response did not include a Deployments array');
+  }
+  return payload.Deployments;
 }
 
 // --- b) Metrics --------------------------------------------------------
