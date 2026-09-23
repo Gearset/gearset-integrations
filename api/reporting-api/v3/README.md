@@ -12,6 +12,26 @@
 - ID of your Pipeline
 - ID of your Pipeline Environment that deploys to Production Salesforce org (needed for some metrics)
 
+### Getting pipelines from API
+
+You can use the `/reporting/pipelines` endpoint to get a list of all your Pipelines.
+
+```javascript
+const API_TOKEN = 'YOUR_API_ACCESS_TOKEN';
+
+async function getPipelines() {
+  const res = await fetch(
+    `https://api.gearset.com/public/reporting/pipelines`,
+    { headers: apiHeaders() }
+  );
+  return res.json();
+}
+
+// get pipelines and log result
+const pipelines = await getPipelines();
+console.log(pipelines);
+```
+
 ### Getting environments from API
 
 You can use the `/reporting/environments` endpoint to get a list of all your Pipeline environments. The one where `OrgLocationType` is `SalesforceProductionOrg` is considered a production environment.
