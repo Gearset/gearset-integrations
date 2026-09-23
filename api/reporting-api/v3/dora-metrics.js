@@ -128,7 +128,7 @@ const ms = s => new Date(s).valueOf();
 const bugs = d => d.ReportedBugs || [];           // null means no bugs
 const isQualifyingBug = b => Number(b.Severity) <= 2;
 const isProduction = d => d.PipelineEnvironmentId === PRODUCTION_ENVIRONMENT_ID;
-const isSuccessful = d => d.Status === 'Successful';
+const isSuccessful = d => d.Status === 'Successful' || d.Status === 'PartiallySuccessful';
 const isNonEmpty = d =>
   d.MetadataItemsInDeploymentCount +
   d.VlocityItemsInDeploymentCount +

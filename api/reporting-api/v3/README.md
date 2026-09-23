@@ -139,7 +139,7 @@ const ms = s => new Date(s).valueOf();
 const bugs = d => d.ReportedBugs || [];
 const isQualifyingBug = b => Number(b.Severity) <= 2;
 const isProduction = d => d.PipelineEnvironmentId === PRODUCTION_ENVIRONMENT_ID;
-const isSuccessful = d => d.Status === 'Successful';
+const isSuccessful = d => d.Status === 'Successful' || d.Status === 'PartiallySuccessful';
 const isNonEmpty = d =>
   d.MetadataItemsInDeploymentCount +
   d.VlocityItemsInDeploymentCount +
@@ -179,7 +179,11 @@ const deploymentSuccessRate =
 
 ### Successful deployments
 
-Count production deployments whose status is `Successful`.
+Count production deployments whose status is `Successful` or `PartiallySuccessful`.
+
+Note that partial success is only relevant to deployments that include both metadata and data. For example, CPQ, Vlocity, etc.
+It indicates that the metadata part of the deployment was successfull, but the data part failed.
+For more about the reasoning behind this see the note in our documentation [here](https://docs.gearset.com/en/articles/11560575-measuring-your-devops-performance#:~:text=deployment%20is%20considered%20%27-,partially%20successful,-%27%20when%20metadata%20deploys)
 
 ```javascript
 const successfulDeployments =
@@ -188,7 +192,7 @@ const successfulDeployments =
 
 ### Failed deployments
 
-Count production deployments whose status is not `Successful`.
+Count production deployments whose status is not `Successful` or `PartiallySuccessful`.
 
 ```javascript
 const failedDeployments =
