@@ -183,7 +183,7 @@ Count production deployments whose status is `Successful` or `PartiallySuccessfu
 
 Note that partial success is only relevant to deployments that include both metadata and data. For example, CPQ, Vlocity, etc.
 It indicates that the metadata part of the deployment was successfull, but the data part failed.
-For more about the reasoning behind this see the note in our documentation [here](https://docs.gearset.com/en/articles/11560575-measuring-your-devops-performance#:~:text=deployment%20is%20considered%20%27-,partially%20successful,-%27%20when%20metadata%20deploys)
+For more about the reasoning behind this see the note in our documentation [here](https://docs.gearset.com/en/articles/11560575-measuring-your-devops-performance#:~:text=be%20listed%20as%20%27-,partially%20successful,-%27%20in%20Gearset%20when)
 
 ```javascript
 const successfulDeployments =
