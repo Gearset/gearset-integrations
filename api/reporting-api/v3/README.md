@@ -12,6 +12,26 @@
 - ID of your Pipeline
 - ID of your Pipeline Environment that deploys to Production Salesforce org (needed for some metrics)
 
+### Getting pipelines from API
+
+You can use the `/reporting/pipelines` endpoint to get a list of all your Pipelines.
+
+```javascript
+const API_TOKEN = 'YOUR_API_ACCESS_TOKEN';
+
+async function getPipelines() {
+  const res = await fetch(
+    `https://api.gearset.com/public/reporting/pipelines`,
+    { headers: apiHeaders() }
+  );
+  return res.json();
+}
+
+// get pipelines and log result
+const pipelines = await getPipelines();
+console.log(pipelines);
+```
+
 ### Getting environments from API
 
 You can use the `/reporting/environments` endpoint to get a list of all your Pipeline environments. The one where `OrgLocationType` is `SalesforceProductionOrg` is considered a production environment.
@@ -119,7 +139,7 @@ const ms = s => new Date(s).valueOf();
 const bugs = d => d.ReportedBugs || [];
 const isQualifyingBug = b => Number(b.Severity) <= 2;
 const isProduction = d => d.PipelineEnvironmentId === PRODUCTION_ENVIRONMENT_ID;
-const isSuccessful = d => d.Status === 'Successful';
+const isSuccessful = d => d.Status === 'Successful' || d.Status === 'PartiallySuccessful';
 const isNonEmpty = d =>
   d.MetadataItemsInDeploymentCount +
   d.VlocityItemsInDeploymentCount +
@@ -159,7 +179,11 @@ const deploymentSuccessRate =
 
 ### Successful deployments
 
-Count production deployments whose status is `Successful`.
+Count production deployments whose status is `Successful` or `PartiallySuccessful`.
+
+Note that partial success is only relevant to deployments that include both metadata and data. For example, CPQ, Vlocity, etc.
+It indicates that the metadata part of the deployment was successfull, but the data part failed.
+For more about the reasoning behind this see the note in our documentation [here](https://docs.gearset.com/en/articles/11560575-measuring-your-devops-performance#:~:text=be%20listed%20as%20%27-,partially%20successful,-%27%20in%20Gearset%20when)
 
 ```javascript
 const successfulDeployments =
@@ -168,7 +192,7 @@ const successfulDeployments =
 
 ### Failed deployments
 
-Count production deployments whose status is not `Successful`.
+Count production deployments whose status is not `Successful` or `PartiallySuccessful`.
 
 ```javascript
 const failedDeployments =
